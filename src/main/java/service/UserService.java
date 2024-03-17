@@ -39,7 +39,6 @@ public class UserService {
     }
 
     public void editeUser(UserDto userDto) {
-        if (userDto.getId() == null) return; //todo throw
         User user = userRep.find(userDto.getId());
         user.setUsername(userDto.getUsername());
         user.setName(userDto.getName());
@@ -47,6 +46,7 @@ public class UserService {
     }
 
     public void removeUser(UserDto userDto) {
+        if (userDto.getId() == null) throw  new RuntimeException("в Dto нет id");
         User user = new User();
         user.setId(userDto.getId());
         user.setUsername(userDto.getUsername());
