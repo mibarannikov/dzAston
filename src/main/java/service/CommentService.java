@@ -1,7 +1,6 @@
 package service;
 
 import dto.CommentDto;
-import dto.PostDto;
 import entity.Comment;
 import entity.Post;
 import entity.User;
@@ -13,9 +12,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CommentService {
-    private  final PostRepository postRep ;
-    private  final UserRepository userRep ;
-    private  final CommentRepository commentRep;
+    private final PostRepository postRep;
+    private final UserRepository userRep;
+    private final CommentRepository commentRep;
 
     public CommentService() {
         this.postRep = new PostRepository();
@@ -40,11 +39,12 @@ public class CommentService {
         User user = userRep.find(commentDto.getUser().getId());
         comment.setUser(user);
         Post post = postRep.find(commentDto.getPost().getId());
+        comment.setPost(post);
         commentRep.create(comment);
     }
 
     public void editeComment(CommentDto commentDto) {
-        if (commentDto.getId()==null) return;// todo throw
+        if (commentDto.getId() == null) return;// todo throw
         Comment comment = commentRep.find(commentDto.getId());
         comment.setText(commentDto.getText());
         commentRep.edit(comment);
@@ -56,10 +56,11 @@ public class CommentService {
         commentRep.remove(comment);
     }
 
-    public List<CommentDto> findByUser(Integer id){
+    public List<CommentDto> findByUser(Integer id) {
         return commentRep.findAllByUser(userRep.find(id)).stream().map(CommentDto::new).collect(Collectors.toList());
     }
-    public List<CommentDto> findByPost(Integer id){
+
+    public List<CommentDto> findByPost(Integer id) {
         return commentRep.findAllByPost(postRep.find(id)).stream().map(CommentDto::new).collect(Collectors.toList());
     }
 

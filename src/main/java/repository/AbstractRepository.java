@@ -70,11 +70,12 @@ public abstract class AbstractRepository<T> {
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery("SELECT * FROM `fff`.`" + getTableName() + "` where id=" + id)) {
             if (!result.next()) {
-                throw new RuntimeException("не найден id: " + id);
+                throw new SQLException("не найден " + getTableName() + " c id: " + id);
             }
             out = mapResultSetToEntity(result);
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
 
         return out;
@@ -137,7 +138,6 @@ public abstract class AbstractRepository<T> {
         Field[] fields = entity.getClass().getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
-            System.out.println("dddd" + entity.getClass());
             try {
                 if (field.isAnnotationPresent(MyManyToOne.class)) {
                     Object obj = getRepositoryAndInvokeMethod(field, "find", Integer.class, resultSet.getObject(getColumnName(field)));

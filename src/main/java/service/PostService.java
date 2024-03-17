@@ -1,8 +1,6 @@
 package service;
 
-import dto.CommentDto;
 import dto.PostDto;
-import dto.UserDto;
 import entity.Post;
 import entity.User;
 import repository.PostRepository;
@@ -12,9 +10,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PostService {
-    private final PostRepository postRep ;
-    private final UserRepository userRep ;
-    private final CommentService commentService ;
+    private final PostRepository postRep;
+    private final UserRepository userRep;
+    private final CommentService commentService;
 
     public PostService() {
         this.postRep = new PostRepository();
@@ -44,7 +42,7 @@ public class PostService {
     }
 
     public void editePost(PostDto postDto) {
-        if (postDto.getId()==null) return;
+        if (postDto.getId() == null) return;
         Post post = postRep.find(postDto.getId());
         post.setText(postDto.getText());
         postRep.edit(post);
@@ -56,11 +54,11 @@ public class PostService {
         postRep.remove(post);
     }
 
-    public List<PostDto> findByUser(Integer id){
+    public List<PostDto> findByUser(Integer id) {
         return postRep.findAllByUser(userRep.find(id)).stream().map(PostDto::new).collect(Collectors.toList());
     }
 
-    public List<PostDto> getAllPost(){
+    public List<PostDto> getAllPost() {
         return postRep.findAll().stream().map(PostDto::new).collect(Collectors.toList());
     }
 }
